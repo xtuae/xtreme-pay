@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../stores/auth';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5001/api',
+  baseURL: 'https://xtremepay-bo9v64gar-haja-xtuaecoms-projects.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
