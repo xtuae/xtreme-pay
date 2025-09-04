@@ -1,5 +1,48 @@
-# Vue 3 + Vite
+# Xtreme Pay - Frontend
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+This is the frontend application for the Xtreme Pay payment aggregator portal.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Tech Stack
+
+- **Framework**: Vue.js 3 with Composition API
+- **UI Library**: Shadcn Vue
+- **State Management**: Pinia
+- **Routing**: Vue Router 4
+- **HTTP Client**: Axios
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v22.x or later)
+- npm
+
+### Installation
+
+1.  Navigate to the `client` directory:
+    ```bash
+    cd client
+    ```
+2.  Install the dependencies:
+    ```bash
+    npm install
+    ```
+
+### Running the Development Server
+
+1.  Create a `.env` file in the `client` directory and add the following environment variables:
+    ```
+    VITE_SUPABASE_URL="your-supabase-url"
+    VITE_SUPABASE_KEY="your-supabase-anon-key"
+    ```
+2.  Start the development server:
+    ```bash
+    npm run dev
+    ```
+
+### Building for Production
+
+```bash
+npm run build
