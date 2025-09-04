@@ -1,0 +1,52 @@
+export const USER_ROLES = {
+  USER: 'user',
+  MODERATOR: 'moderator',
+  SUPER_ADMIN: 'superadmin'
+}
+
+export const PERMISSIONS = {
+  // User permissions
+  VIEW_DASHBOARD: 'view_dashboard',
+  MANAGE_PROFILE: 'manage_profile',
+  PROCESS_PAYMENTS: 'process_payments',
+  VIEW_TRANSACTIONS: 'view_transactions',
+  MANAGE_INVOICES: 'manage_invoices',
+  
+  // Moderator permissions
+  VIEW_ALL_USERS: 'view_all_users',
+  APPROVE_USERS: 'approve_users',
+  VIEW_ADMIN_DASHBOARD: 'view_admin_dashboard',
+  
+  // Super Admin permissions
+  CREATE_USERS: 'create_users',
+  DELETE_USERS: 'delete_users',
+  MANAGE_SYSTEM: 'manage_system',
+  VIEW_SUPER_ADMIN_DASHBOARD: 'view_super_admin_dashboard'
+}
+
+const USER_PERMISSIONS = [
+  PERMISSIONS.VIEW_DASHBOARD,
+  PERMISSIONS.MANAGE_PROFILE,
+  PERMISSIONS.PROCESS_PAYMENTS,
+  PERMISSIONS.VIEW_TRANSACTIONS,
+  PERMISSIONS.MANAGE_INVOICES
+];
+
+const MODERATOR_PERMISSIONS = [
+  ...USER_PERMISSIONS,
+  PERMISSIONS.VIEW_ALL_USERS,
+  PERMISSIONS.APPROVE_USERS,
+  PERMISSIONS.VIEW_ADMIN_DASHBOARD
+];
+
+export const ROLE_PERMISSIONS = {
+  [USER_ROLES.USER]: USER_PERMISSIONS,
+  [USER_ROLES.MODERATOR]: MODERATOR_PERMISSIONS,
+  [USER_ROLES.SUPER_ADMIN]: [
+    ...MODERATOR_PERMISSIONS,
+    PERMISSIONS.CREATE_USERS,
+    PERMISSIONS.DELETE_USERS,
+    PERMISSIONS.MANAGE_SYSTEM,
+    PERMISSIONS.VIEW_SUPER_ADMIN_DASHBOARD
+  ]
+}

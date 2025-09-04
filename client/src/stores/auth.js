@@ -13,19 +13,19 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state) => !!state.token,
     isAdmin: (state) => state.user?.user_metadata?.role === 'admin' || state.user?.user_metadata?.role === 'superadmin',
     isSuperAdmin: (state) => state.user?.user_metadata?.role === 'superadmin',
-    isApproved: (state) => state.user?.user_metadata?.status === 'approved'
   },
   
   actions: {
     async login(credentials) {
       this.isLoading = true
+      this.error = null
       try {
         const { data, error } = await supabase.auth.signInWithPassword(credentials)
         if (error) throw error
         this.token = data.session.access_token
         this.user = data.user
         localStorage.setItem('token', this.token)
-        this.error = null
+        return data.user // Return the user object
       } catch (error) {
         this.error = error.message || 'Login failed'
         throw error
@@ -36,6 +36,7 @@ export const useAuthStore = defineStore('auth', {
     
     async register(userData) {
       this.isLoading = true
+      this.error = null
       try {
         const { data, error } = await supabase.auth.signUp({
           email: userData.email,
@@ -55,7 +56,7 @@ export const useAuthStore = defineStore('auth', {
         this.token = data.session.access_token
         this.user = data.user
         localStorage.setItem('token', this.token)
-        this.error = null
+        return data.user // Return the user object
       } catch (error) {
         this.error = error.message || 'Registration failed'
         throw error
@@ -66,6 +67,7 @@ export const useAuthStore = defineStore('auth', {
     
     async logout() {
       this.isLoading = true
+      this.error = null
       try {
         const { error } = await supabase.auth.signOut()
         if (error) throw error

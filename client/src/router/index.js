@@ -2,19 +2,20 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from '../pages/auth/LoginPage.vue';
 import RegisterPage from '../pages/auth/RegisterPage.vue';
 import AppLayout from '../components/layout/AppLayout.vue';
-import Dashboard from '../pages/user/Dashboard.vue';
-import Profile from '../pages/user/Profile.vue';
-import Transactions from '../pages/user/Transactions.vue';
-import Invoices from '../pages/user/Invoices.vue';
-import PaymentGateways from '../pages/user/PaymentGateways.vue';
-import TaxSettings from '../pages/user/TaxSettings.vue';
-import Settings from '../pages/user/Settings.vue';
-import Onboarding from '../pages/user/Onboarding.vue';
-import AdminDashboard from '../pages/admin/AdminDashboard.vue';
-import UserManagement from '../pages/admin/UserManagement.vue';
-import OnboardingTracking from '../pages/admin/OnboardingTracking.vue';
-import AdminSettings from '../pages/admin/AdminSettings.vue';
+import UserDashboard from '../pages/dashboard/UserDashboard.vue';
+import AdminDashboard from '../pages/dashboard/AdminDashboard.vue';
 import SuperAdminDashboard from '../pages/dashboard/SuperAdminDashboard.vue';
+import UsersPage from '../pages/users/UsersPage.vue';
+import OnboardingPage from '../pages/users/OnboardingPage.vue';
+import ProfilePage from '../pages/users/ProfilePage.vue';
+import PaymentGateways from '../pages/payments/PaymentGateways.vue';
+import TransactionsPage from '../pages/payments/TransactionsPage.vue';
+import ProcessPayment from '../pages/payments/ProcessPayment.vue';
+import InvoicesPage from '../pages/invoices/InvoicesPage.vue';
+import CreateInvoicePage from '../pages/invoices/CreateInvoicePage.vue';
+import SettingsPage from '../pages/settings/SettingsPage.vue';
+import TaxSettingsPage from '../pages/settings/TaxSettingsPage.vue';
+import ReportsPage from '../pages/reports/ReportsPage.vue';
 import { useAuthStore } from '../stores/auth';
 
 const routes = [
@@ -25,23 +26,35 @@ const routes = [
     component: AppLayout,
     meta: { requiresAuth: true },
     children: [
-      { path: '', component: Dashboard },
-      { path: 'profile', component: Profile },
-      { path: 'transactions', component: Transactions },
-      { path: 'invoices', component: Invoices },
+      { path: '', component: UserDashboard },
+      { path: 'profile', component: ProfilePage },
+      { path: 'transactions', component: TransactionsPage },
+      { path: 'invoices', component: InvoicesPage },
+      { path: 'invoices/create', component: CreateInvoicePage },
       { path: 'gateways', component: PaymentGateways },
-      { path: 'tax-settings', component: TaxSettings },
-      { path: 'settings', component: Settings },
-      { path: 'onboarding', component: Onboarding },
+      { path: 'tax-settings', component: TaxSettingsPage },
+      { path: 'settings', component: SettingsPage },
+      { path: 'onboarding', component: OnboardingPage },
+      { path: 'reports', component: ReportsPage },
     ],
   },
-  // Admin routes
-  { path: '/admin', component: AdminDashboard, meta: { requiresAuth: true, admin: true } },
-  { path: '/admin/users', component: UserManagement, meta: { requiresAuth: true, admin: true } },
-  { path: '/admin/onboarding', component: OnboardingTracking, meta: { requiresAuth: true, admin: true } },
-  { path: '/admin/settings', component: AdminSettings, meta: { requiresAuth: true, admin: true } },
-  // Super Admin routes
-  { path: '/super-admin', component: SuperAdminDashboard, meta: { requiresAuth: true, superAdmin: true } },
+  {
+    path: '/admin',
+    component: AppLayout,
+    meta: { requiresAuth: true, admin: true },
+    children: [
+      { path: '', component: AdminDashboard },
+      { path: 'users', component: UsersPage },
+    ],
+  },
+  {
+    path: '/super-admin',
+    component: AppLayout,
+    meta: { requiresAuth: true, superAdmin: true },
+    children: [
+      { path: '', component: SuperAdminDashboard },
+    ],
+  },
 ];
 
 const router = createRouter({
@@ -54,9 +67,9 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!authStore.isAuthenticated) {
       next('/login');
-    } else if (to.matched.some((record) => record.meta.admin) && !authStore.isAdmin) {
-      next('/');
     } else if (to.matched.some((record) => record.meta.superAdmin) && !authStore.isSuperAdmin) {
+      next('/');
+    } else if (to.matched.some((record) => record.meta.admin) && !authStore.isAdmin) {
       next('/');
     } else {
       next();
