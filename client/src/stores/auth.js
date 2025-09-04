@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { api } from '../utils/api'
+import { supabase } from '../utils/supabase'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -11,22 +11,23 @@ export const useAuthStore = defineStore('auth', {
   
   getters: {
     isAuthenticated: (state) => !!state.token,
-    isAdmin: (state) => state.user?.role === 'admin' || state.user?.role === 'superadmin',
-    isSuperAdmin: (state) => state.user?.role === 'superadmin',
-    isApproved: (state) => state.user?.status === 'approved'
+    isAdmin: (state) => state.user?.user_metadata?.role === 'admin' || state.user?.user_metadata?.role === 'superadmin',
+    isSuperAdmin: (state) => state.user?.user_metadata?.role === 'superadmin',
+    isApproved: (state) => state.user?.user_metadata?.status === 'approved'
   },
   
   actions: {
     async login(credentials) {
       this.isLoading = true
       try {
-        const response = await api.post('/auth/login', credentials)
-        this.token = response.data.token
-        this.user = response.data.user
+        const { data, error } = await supabase.auth.signInWithPassword(credentials)
+        if (error) throw error
+        this.token = data.session.access_token
+        this.user = data.user
         localStorage.setItem('token', this.token)
         this.error = null
       } catch (error) {
-        this.error = error.response?.data?.message || 'Login failed'
+        this.error = error.message || 'Login failed'
         throw error
       } finally {
         this.isLoading = false
@@ -36,23 +37,47 @@ export const useAuthStore = defineStore('auth', {
     async register(userData) {
       this.isLoading = true
       try {
-        const response = await api.post('/auth/register', userData)
-        this.token = response.data.token
-        this.user = response.data.user
+        const { data, error } = await supabase.auth.signUp({
+          email: userData.email,
+          password: userData.password,
+          options: {
+            data: {
+              first_name: userData.firstName,
+              last_name: userData.lastName,
+              company_name: userData.companyName,
+              phone: userData.phone,
+              role: 'user',
+              status: 'pending'
+            }
+          }
+        })
+        if (error) throw error
+        this.token = data.session.access_token
+        this.user = data.user
         localStorage.setItem('token', this.token)
         this.error = null
       } catch (error) {
-        this.error = error.response?.data?.message || 'Registration failed'
+        this.error = error.message || 'Registration failed'
         throw error
       } finally {
         this.isLoading = false
       }
     },
     
-    logout() {
-      this.user = null
-      this.token = null
-      localStorage.removeItem('token')
+    async logout() {
+      this.isLoading = true
+      try {
+        const { error } = await supabase.auth.signOut()
+        if (error) throw error
+        this.user = null
+        this.token = null
+        localStorage.removeItem('token')
+      } catch (error) {
+        this.error = error.message || 'Logout failed'
+        throw error
+      } finally {
+        this.isLoading = false
+      }
     }
   }
 })

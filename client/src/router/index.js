@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Login from '../pages/auth/Login.vue';
-import Signup from '../pages/auth/Signup.vue';
+import LoginPage from '../pages/auth/LoginPage.vue';
+import RegisterPage from '../pages/auth/RegisterPage.vue';
+import AppLayout from '../components/layout/AppLayout.vue';
 import Dashboard from '../pages/user/Dashboard.vue';
 import Profile from '../pages/user/Profile.vue';
 import Transactions from '../pages/user/Transactions.vue';
@@ -13,24 +14,34 @@ import AdminDashboard from '../pages/admin/AdminDashboard.vue';
 import UserManagement from '../pages/admin/UserManagement.vue';
 import OnboardingTracking from '../pages/admin/OnboardingTracking.vue';
 import AdminSettings from '../pages/admin/AdminSettings.vue';
+import SuperAdminDashboard from '../pages/dashboard/SuperAdminDashboard.vue';
 import { useAuthStore } from '../stores/auth';
 
 const routes = [
-  { path: '/login', component: Login, meta: { guest: true } },
-  { path: '/signup', component: Signup, meta: { guest: true } },
-  { path: '/', component: Dashboard, meta: { requiresAuth: true } },
-  { path: '/profile', component: Profile, meta: { requiresAuth: true } },
-  { path: '/transactions', component: Transactions, meta: { requiresAuth: true } },
-  { path: '/invoices', component: Invoices, meta: { requiresAuth: true } },
-  { path: '/gateways', component: PaymentGateways, meta: { requiresAuth: true } },
-  { path: '/tax-settings', component: TaxSettings, meta: { requiresAuth: true } },
-  { path: '/settings', component: Settings, meta: { requiresAuth: true } },
-  { path: '/onboarding', component: Onboarding, meta: { requiresAuth: true } },
+  { path: '/login', component: LoginPage, meta: { guest: true } },
+  { path: '/signup', component: RegisterPage, meta: { guest: true } },
+  {
+    path: '/',
+    component: AppLayout,
+    meta: { requiresAuth: true },
+    children: [
+      { path: '', component: Dashboard },
+      { path: 'profile', component: Profile },
+      { path: 'transactions', component: Transactions },
+      { path: 'invoices', component: Invoices },
+      { path: 'gateways', component: PaymentGateways },
+      { path: 'tax-settings', component: TaxSettings },
+      { path: 'settings', component: Settings },
+      { path: 'onboarding', component: Onboarding },
+    ],
+  },
   // Admin routes
   { path: '/admin', component: AdminDashboard, meta: { requiresAuth: true, admin: true } },
   { path: '/admin/users', component: UserManagement, meta: { requiresAuth: true, admin: true } },
   { path: '/admin/onboarding', component: OnboardingTracking, meta: { requiresAuth: true, admin: true } },
   { path: '/admin/settings', component: AdminSettings, meta: { requiresAuth: true, admin: true } },
+  // Super Admin routes
+  { path: '/super-admin', component: SuperAdminDashboard, meta: { requiresAuth: true, superAdmin: true } },
 ];
 
 const router = createRouter({
@@ -44,6 +55,8 @@ router.beforeEach((to, from, next) => {
     if (!authStore.isAuthenticated) {
       next('/login');
     } else if (to.matched.some((record) => record.meta.admin) && !authStore.isAdmin) {
+      next('/');
+    } else if (to.matched.some((record) => record.meta.superAdmin) && !authStore.isSuperAdmin) {
       next('/');
     } else {
       next();

@@ -1,6 +1,5 @@
-require('dotenv').config({ path: '../.env' });
-const db = require('../config/db');
-const bcrypt = require('bcryptjs');
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const supabase = require('../config/supabase');
 
 const createSuperAdmin = async () => {
   const email = 'hello@hmhlabz.com';
@@ -9,27 +8,30 @@ const createSuperAdmin = async () => {
   const lastName = 'Admin';
 
   try {
-    // Check if user already exists
-    const userExists = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (userExists.rows.length > 0) {
-      console.log('Superadmin with this email already exists.');
-      return;
+    const { data: { user }, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          first_name: firstName,
+          last_name: lastName,
+          role: 'superadmin',
+          status: 'approved',
+        }
+      }
+    });
+
+    if (error) {
+      console.error('Error creating superadmin user:', error);
+      return { success: false, message: 'Error creating superadmin user.', error: error.message };
     }
 
-    // Hash password
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
-
-    // Insert new superadmin user
-    await db.query(
-      "INSERT INTO users (email, password_hash, first_name, last_name, role, status, approved_at, approved_by) VALUES ($1, $2, $3, $4, 'superadmin', 'approved', CURRENT_TIMESTAMP, (SELECT id FROM users WHERE role = 'superadmin' LIMIT 1))",
-      [email, passwordHash, firstName, lastName]
-    );
-
     console.log('Superadmin user created successfully.');
+    return { success: true, message: 'Superadmin user created successfully.', user };
   } catch (error) {
     console.error('Error creating superadmin user:', error);
+    return { success: false, message: 'Error creating superadmin user.', error: error.message };
   }
 };
 
-createSuperAdmin();
+module.exports = createSuperAdmin;

@@ -7,7 +7,11 @@ const getPool = () => {
   if (!pool) {
     try {
       pool = new Pool({
-        connectionString: process.env.DATABASE_URL,
+        user: 'postgres',
+        host: 'db.foozzcxmfjsvnapyzwgy.supabase.co',
+        database: 'postgres',
+        password: 'C@rdlm4283',
+        port: 5432,
         ssl: {
           rejectUnauthorized: false
         },

@@ -29,15 +29,15 @@ app.get('/', (req, res) => {
   }
 });
 
-// Routes (commented out for debugging)
+// Routes
 const authRoutes = require('./routes/auth.routes');
-// const userRoutes = require('./routes/users.routes');
+const userRoutes = require('./routes/users.routes');
 const gatewayRoutes = require('./routes/gateways.routes');
 const transactionRoutes = require('./routes/transactions.routes');
 const invoiceRoutes = require('./routes/invoices.routes');
 
 app.use('/api/auth', authRoutes);
-// app.use('/api/users', userRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/gateways', gatewayRoutes);
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/invoices', invoiceRoutes);
