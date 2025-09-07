@@ -12,6 +12,29 @@ This is the frontend application for the Xtreme Pay payment aggregator portal.
 - **Build Tool**: Vite
 - **Styling**: Tailwind CSS
 
+## Features
+
+### Authentication
+- Role-based access control (Super Admin, Moderator, Merchant)
+- Login, Register, and Forgot Password pages
+- Secure token-based authentication
+
+### Super Admin
+- Comprehensive dashboard with system-level analytics
+- User management system with advanced filtering and bulk operations
+- Document verification system with a document viewer and approval workflow
+- System-level payment gateway management
+- Gateway analytics and monitoring
+
+### Merchant
+- Comprehensive dashboard with revenue and transaction analytics
+- Payment links management system
+- Product management system
+- Transaction management system with advanced filtering and bulk operations
+- Analytics and reporting system
+- User gateway configuration system
+- Settings and profile management
+
 ## Getting Started
 
 ### Prerequisites
