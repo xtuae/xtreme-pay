@@ -35,6 +35,15 @@ This is the frontend application for the Xtreme Pay payment aggregator portal.
 - User gateway configuration system
 - Settings and profile management
 
+## Recent Updates
+
+**September 7, 2025**
+- Implemented a comprehensive frontend with features for Super Admins and Merchants.
+- Added role-based access control for all routes.
+- Integrated `shadcn-vue` for the UI component library.
+- Set up Pinia stores for state management.
+- Created a modular architecture with services, stores, views, and components.
+
 ## Getting Started
 
 ### Prerequisites
