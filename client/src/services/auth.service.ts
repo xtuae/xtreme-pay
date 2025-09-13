@@ -1,4 +1,4 @@
-import { supabase } from '@/utils/supabase'
+import { supabase } from '../utils/supabase'
 import type { User } from '@/types/auth'
 
 class AuthService {
@@ -44,6 +44,14 @@ class AuthService {
       .select('*')
       .eq('user_id', userId)
       .single()
+    if (error) throw error
+    return data
+  }
+
+  async createMerchantProfile(profileData: any) {
+    const { data, error } = await supabase
+      .from('merchant_profiles')
+      .insert([profileData])
     if (error) throw error
     return data
   }

@@ -1,5 +1,5 @@
 <template>
-  <Card>
+  <Card class="cursor-pointer hover:shadow-lg transition" @click="$emit('click')">
     <CardHeader>
       <CardTitle>{{ document.name }}</CardTitle>
       <CardDescription>{{ document.user.name }}</CardDescription>

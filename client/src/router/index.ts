@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
-import LoginView from '../views/auth/LoginView.vue';
+import LoginPage from '../pages/auth/LoginPage.vue';
 import RegisterView from '../views/auth/RegisterView.vue';
 import ForgotPasswordView from '../views/auth/ForgotPasswordView.vue';
 import MerchantLayout from '../components/layouts/MerchantLayout.vue';
@@ -21,10 +21,9 @@ import UserDetailView from '../views/super-admin/UserDetailView.vue';
 import KYCVerificationView from '../views/super-admin/KYCVerificationView.vue';
 import GatewayManagementView from '../views/super-admin/GatewayManagementView.vue';
 import GatewayAnalyticsView from '../views/super-admin/GatewayAnalyticsView.vue';
-import UsersPage from '../pages/users/UsersPage.vue';
-import OnboardingPage from '../pages/users/OnboardingPage.vue';
+import AuditLogsView from '../views/super-admin/AuditLogsView.vue'  //Auditlogs
 import ProfilePage from '../pages/users/ProfilePage.vue';
-import PaymentGateways from '../pages/payments/PaymentGateways.vue';
+import OnboardingPage from '../pages/users/OnboardingPage.vue';
 import TransactionsPage from '../pages/payments/TransactionsPage.vue';
 import ProcessPayment from '../pages/payments/ProcessPayment.vue';
 import InvoicesPage from '../pages/invoices/InvoicesPage.vue';
@@ -35,11 +34,11 @@ import ReportsPage from '../pages/reports/ReportsPage.vue';
 import { authGuard } from './guards';
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/login', component: LoginView, meta: { guest: true } },
-  { path: '/signup', component: RegisterView, meta: { guest: true } },
+  { path: '/', component: LoginPage },
+  { path: '/signup', component: RegisterView },
   { path: '/forgot-password', component: ForgotPasswordView, meta: { guest: true } },
   {
-    path: '/',
+    path: '/merchant',
     component: MerchantLayout,
     meta: { requiresAuth: true, roles: ['user'] },
     children: [
@@ -72,12 +71,14 @@ const routes: Array<RouteRecordRaw> = [
     component: SuperAdminLayout,
     meta: { requiresAuth: true, roles: ['superadmin'] },
     children: [
-      { path: '', component: SuperAdminDashboard },
-      { path: 'users', component: UserManagementView },
+      { path: '', component: SuperAdminDashboard }, //Done
+      { path: 'users', component: UserManagementView }, //Done
       { path: 'users/:id', component: UserDetailView },
-      { path: 'kyc', component: KYCVerificationView },
-      { path: 'gateways', component: GatewayManagementView },
-      { path: 'analytics', component: GatewayAnalyticsView },
+      { path: 'kyc', component: KYCVerificationView }, //Done
+      { path: 'gateways', component: GatewayManagementView }, //Done
+      { path: 'analytics', component: GatewayAnalyticsView }, //Done
+      { path: 'logs', component: AuditLogsView },   // Audit Log route
+      { path: 'settings', component:SettingsPage}
     ],
   },
 ];

@@ -21,6 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (userData.role === 'user') {
         await fetchMerchantProfile(userData.id)
       }
+      return userData // Add this line to return the user data
     } finally {
       isLoading.value = false
     }
@@ -31,6 +32,15 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const newUser = await authService.register(userData)
       user.value = newUser
+      if (newUser) {
+        await authService.createMerchantProfile({
+          user_id: newUser.id,
+          business_name: userData.businessName,
+          business_type: userData.businessType,
+          business_phone: userData.businessPhone,
+          address: userData.address,
+        })
+      }
     } finally {
       isLoading.value = false
     }

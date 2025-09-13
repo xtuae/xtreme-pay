@@ -57,16 +57,20 @@ const router = useRouter()
 const handleLogin = async () => {
   try {
     const user = await authStore.login({ email: email.value, password: password.value })
-    if (user.user_metadata?.role === 'superadmin') {
+    if (user && user.user_metadata?.role === 'superadmin') {
       router.push('/super-admin')
-    } else if (user.user_metadata?.role === 'admin') {
+    } else if (user && user.user_metadata?.role === 'admin') {
       router.push('/admin')
+    } else if (user) { // If user exists but no specific role, redirect to default
+      router.push('/merchant') // Assuming '/merchant' is the default authenticated route
     } else {
-      router.push('/')
+      // Handle cases where login fails and user is null/undefined
+      console.error('Login failed: User object is null or undefined after login attempt.')
+      // Here you would typically show a toast notification for general login failure
     }
   } catch (error) {
     console.error('Login failed:', error)
-    // Here you would typically show a toast notification
+    // Here you would typically show a toast notification for network errors or other exceptions
   }
 }
 </script>

@@ -5,7 +5,12 @@
     </CardHeader>
     <CardContent>
       <div class="h-80">
-        <!-- Map will go here -->
+        <ul class="space-y-2">
+          <li>India: 45%</li>
+          <li>USA: 30%</li>
+          <li>Europe: 15%</li>
+          <li>Others: 10%</li>
+        </ul>
       </div>
     </CardContent>
   </Card>

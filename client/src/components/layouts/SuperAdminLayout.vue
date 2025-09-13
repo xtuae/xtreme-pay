@@ -12,7 +12,7 @@ const navigation = [
   { name: 'User Management', href: '/super-admin/users' },
   { name: 'System Analytics', href: '/super-admin/analytics' },
   { name: 'Gateway Management', href: '/super-admin/gateways' },
-  { name: 'Document Verification', href: '/super-admin/documents' },
+  { name: 'Document Verification', href: '/super-admin/kyc' }, //route change
   { name: 'System Settings', href: '/super-admin/settings' },
   { name: 'Audit Logs', href: '/super-admin/logs' },
 ]

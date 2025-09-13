@@ -1,17 +1,28 @@
 <template>
   <div class="space-y-4">
     <h1 class="text-3xl font-bold">KYC Verification</h1>
+
+    <!-- Filters -->
     <div class="flex items-center justify-between">
       <KYCFilters />
     </div>
+
+    <!-- Document Cards -->
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <DocumentCard v-for="doc in kyc.documents" :key="doc.id" :document="doc" />
+      <DocumentCard 
+        v-for="doc in kyc.filteredDocuments" 
+        :key="doc.id" 
+        :document="doc" 
+        @click="kyc.selectDocument(doc)" 
+      />
     </div>
-    <div class="grid gap-4 md:grid-cols-2">
-      <DocumentViewer />
+
+    <!-- Viewer & Actions -->
+    <div class="grid gap-4 md:grid-cols-2" v-if="kyc.selectedDocument">
+      <DocumentViewer :document="kyc.selectedDocument" />
       <div>
-        <VerificationActions />
-        <DocumentHistory class="mt-4" />
+        <VerificationActions :document="kyc.selectedDocument" />
+        <DocumentHistory class="mt-4" :document="kyc.selectedDocument" />
       </div>
     </div>
   </div>

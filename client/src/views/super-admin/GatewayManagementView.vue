@@ -4,9 +4,16 @@
       <h1 class="text-3xl font-bold">Gateway Management</h1>
       <AddGatewayModal />
     </div>
+
     <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      <SystemGatewayCard v-for="gateway in gatewayStore.gateways" :key="gateway.id" :gateway="gateway" />
+      <SystemGatewayCard
+        v-for="gateway in gatewayStore.gateways"
+        :key="gateway.id"
+        :gateway="gateway"
+      />
     </div>
+
+    <!-- configuration component reads selectedGateway from the store -->
     <GatewayConfiguration />
   </div>
 </template>

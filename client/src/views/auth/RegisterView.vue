@@ -12,7 +12,7 @@
       </div>
 
       <form @submit.prevent="onSubmit">
-        <div v-if="currentStep === 0">
+        <div>
           <FormField v-slot="{ componentField }" name="email">
             <FormItem>
               <FormLabel>Email</FormLabel>
@@ -40,9 +40,6 @@
               <FormMessage />
             </FormItem>
           </FormField>
-        </div>
-
-        <div v-if="currentStep === 1">
           <FormField v-slot="{ componentField }" name="businessName">
             <FormItem>
               <FormLabel>Business Name</FormLabel>
@@ -70,9 +67,6 @@
               <FormMessage />
             </FormItem>
           </FormField>
-        </div>
-
-        <div v-if="currentStep === 2">
           <FormField v-slot="{ componentField }" name="address">
             <FormItem>
               <FormLabel>Address</FormLabel>
@@ -82,9 +76,6 @@
               <FormMessage />
             </FormItem>
           </FormField>
-        </div>
-
-        <div v-if="currentStep === 3">
           <FormField name="documents">
             <FormItem>
               <FormLabel>Documents</FormLabel>
@@ -97,9 +88,7 @@
         </div>
 
         <div class="flex justify-between mt-6">
-          <Button v-if="currentStep > 0" @click="prevStep">Back</Button>
-          <Button v-if="currentStep < steps.length - 1" @click="nextStep">Next</Button>
-          <Button v-if="currentStep === steps.length - 1" type="submit" :disabled="auth.isLoading">
+          <Button type="submit" :disabled="auth.isLoading">
             <span v-if="auth.isLoading">Submitting...</span>
             <span v-else>Submit for Approval</span>
           </Button>
@@ -152,26 +141,19 @@ const formSchema = toTypedSchema(z.object({
   path: ["confirmPassword"],
 }))
 
-const { handleSubmit } = useForm({
+const { handleSubmit, validate } = useForm({
   validationSchema: formSchema,
 })
 
 const onSubmit = handleSubmit(async (values) => {
+  console.log('onSubmit called with values:', values);
   await auth.register(values)
-  if (auth.isAuthenticated) {
-    router.push('/')
-  }
+  console.log('waiting for approval from admin')
+  // Optionally, redirect to a "pending approval" page or show a message on the current page
+  // if (auth.isAuthenticated) {
+  //   router.push('/')
+  // }
 })
 
-function nextStep() {
-  if (currentStep.value < steps.length - 1) {
-    currentStep.value++
-  }
-}
-
-function prevStep() {
-  if (currentStep.value > 0) {
-    currentStep.value--
-  }
-}
+// Removed nextStep and prevStep as multi-step is removed
 </script>

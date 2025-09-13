@@ -11,3 +11,12 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import type { VNode } from 'vue'
+
+defineSlots<{
+  default?: (props: {}) => VNode[]
+  header?: (props: {}) => VNode[]
+}>()
+</script>
