@@ -9,27 +9,22 @@ export const authGuard: NavigationGuard = async (to, from, next) => {
     await authStore.fetchUser()
   }
 
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!authStore.isAuthenticated) {
-      next('/login')
-    } else {
-      const userRole = authStore.user?.role
-      const requiredRoles = to.meta.roles as string[]
-
-      if (requiredRoles && !requiredRoles.includes(userRole!)) {
-        // Redirect to an unauthorized page or home
-        next('/')
-      } else {
-        next()
-      }
-    }
-  } else if (to.matched.some((record) => record.meta.guest)) {
+  if (to.matched.some((record) => record.meta.guest)) {
     if (authStore.isAuthenticated) {
-      next('/')
+      const userRole = authStore.user?.role;
+      if (userRole === 'superadmin') {
+        next('/super-admin');
+      } else if (userRole === 'moderator') {
+        next('/moderator');
+      } else if (userRole === 'user') { // Assuming 'user' role corresponds to '/merchant'
+        next('/merchant');
+      } else {
+        next('/'); // Fallback for other roles or if role is undefined
+      }
     } else {
-      next()
+      next();
     }
   } else {
-    next()
+    next();
   }
 }
