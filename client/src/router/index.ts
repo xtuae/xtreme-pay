@@ -21,7 +21,7 @@ import UserDetailView from '../views/super-admin/UserDetailView.vue';
 import KYCVerificationView from '../views/super-admin/KYCVerificationView.vue';
 import GatewayManagementView from '../views/super-admin/GatewayManagementView.vue';
 import GatewayAnalyticsView from '../views/super-admin/GatewayAnalyticsView.vue';
-import ProfilePage from '../pages/users/ProfilePage.vue';
+import UsersPage from '../pages/users/UsersPage.vue';
 import OnboardingPage from '../pages/users/OnboardingPage.vue';
 import TransactionsPage from '../pages/payments/TransactionsPage.vue';
 import ProcessPayment from '../pages/payments/ProcessPayment.vue';
@@ -44,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '', component: MerchantDashboard },
       { path: 'payment-links', component: PaymentLinksView },
       { path: 'products', component: ProductsView },
-      { path: 'profile', component: ProfilePage },
+      // { path: 'profile', component: ProfilePage },
       { path: 'transactions', component: TransactionsView },
       { path: 'transactions/:id', component: TransactionDetailView },
       { path: 'invoices', component: InvoicesPage },
@@ -70,12 +70,14 @@ const routes: Array<RouteRecordRaw> = [
     component: SuperAdminLayout,
     meta: { requiresAuth: true, roles: ['superadmin'] },
     children: [
-      { path: '', component: SuperAdminDashboard },
-      { path: 'users', component: UserManagementView },
+      { path: '', component: SuperAdminDashboard }, //Done
+      { path: 'users', component: UserManagementView }, //Done
       { path: 'users/:id', component: UserDetailView },
-      { path: 'kyc', component: KYCVerificationView },
-      { path: 'gateways', component: GatewayManagementView },
-      { path: 'analytics', component: GatewayAnalyticsView },
+      { path: 'kyc', component: KYCVerificationView }, //Done
+      { path: 'gateways', component: GatewayManagementView }, //Done
+      { path: 'analytics', component: GatewayAnalyticsView }, //Done
+      // { path: 'logs', component: AuditLogsView },   // Audit Log route
+      { path: 'settings', component:SettingsPage}
     ],
   },
 ];
