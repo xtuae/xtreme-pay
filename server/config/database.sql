@@ -1,19 +1,3 @@
--- User Documents Table
-CREATE TABLE user_documents (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    document_type VARCHAR(50) CHECK (document_type IN ('business_license', 'tax_certificate', 'bank_statement', 'identity_proof')) NOT NULL,
-    file_name VARCHAR(255) NOT NULL,
-    file_path VARCHAR(500) NOT NULL,
-    file_size INTEGER,
-    mime_type VARCHAR(100),
-    verification_status VARCHAR(20) CHECK (verification_status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending',
-    rejection_reason TEXT,
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    verified_at TIMESTAMP,
-    verified_by UUID REFERENCES auth.users(id)
-);
-
 -- Merchant Profiles Table
 CREATE TABLE merchant_profiles (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -29,10 +13,46 @@ CREATE TABLE merchant_profiles (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Users Table
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    company_name VARCHAR(200),
+    phone VARCHAR(20),
+    role VARCHAR(20) CHECK (role IN ('user', 'admin', 'superadmin')) DEFAULT 'user',
+    status VARCHAR(20) CHECK (status IN ('pending', 'approved', 'rejected', 'suspended')) DEFAULT 'pending',
+    setup_fee_paid BOOLEAN DEFAULT FALSE,
+    setup_fee_amount DECIMAL(10,2),
+    onboarding_step INTEGER DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    approved_at TIMESTAMP,
+    approved_by UUID REFERENCES users(id)
+);
+
+-- User Documents Table
+CREATE TABLE user_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    document_type VARCHAR(50) CHECK (document_type IN ('business_license', 'tax_certificate', 'bank_statement', 'identity_proof')) NOT NULL,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(500) NOT NULL,
+    file_size INTEGER,
+    mime_type VARCHAR(100),
+    verification_status VARCHAR(20) CHECK (verification_status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending',
+    rejection_reason TEXT,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    verified_at TIMESTAMP,
+    verified_by UUID REFERENCES users(id)
+);
+
 -- Payment Gateways Table
 CREATE TABLE payment_gateways (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     gateway_name VARCHAR(100) NOT NULL,
     gateway_type VARCHAR(50) CHECK (gateway_type IN ('stripe', 'paypal', 'razorpay', 'square')) NOT NULL,
     api_key_encrypted TEXT,
@@ -48,7 +68,7 @@ CREATE TABLE payment_gateways (
 -- Transactions Table
 CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id),
+    user_id UUID REFERENCES users(id),
     gateway_id UUID REFERENCES payment_gateways(id),
     transaction_id VARCHAR(255) UNIQUE NOT NULL,
     external_transaction_id VARCHAR(255),
@@ -71,7 +91,7 @@ CREATE TABLE transactions (
 -- Invoices Table
 CREATE TABLE invoices (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id),
+    user_id UUID REFERENCES users(id),
     invoice_number VARCHAR(50) UNIQUE NOT NULL,
     customer_email VARCHAR(255) NOT NULL,
     customer_name VARCHAR(200) NOT NULL,
@@ -93,7 +113,7 @@ CREATE TABLE invoices (
 -- Tax Settings Table
 CREATE TABLE tax_settings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id),
+    user_id UUID REFERENCES users(id),
     tax_name VARCHAR(100) NOT NULL,
     tax_rate DECIMAL(5,2) NOT NULL,
     tax_type VARCHAR(20) CHECK (tax_type IN ('percentage', 'fixed')) DEFAULT 'percentage',

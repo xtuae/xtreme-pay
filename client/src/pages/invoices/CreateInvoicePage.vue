@@ -1,9 +1,4 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    <!-- Create Invoice Page Content -->
-    <h1>Create Invoice</h1>
-=======
   <div class="p-6 max-w-4xl mx-auto space-y-6">
     <h1 class="text-2xl font-bold">Generating Invoice</h1>
 
@@ -72,18 +67,10 @@
 
     <!-- Send Invoice Button -->
     <Button class="w-full">Send Invoice</Button>
->>>>>>> ff2358bd51c7e19e2b6257144e6032e90417d006
   </div>
 </template>
 
 <script setup>
-<<<<<<< HEAD
-// Script for Create Invoice Page
-</script>
-
-<style scoped>
-/* Styles for Create Invoice Page */
-=======
 import { ref } from "vue"
 
 // form inputs
@@ -115,5 +102,4 @@ const form = ref({
 
 <style scoped>
 /* no extra CSS needed, handled by shadcn-vue */
->>>>>>> ff2358bd51c7e19e2b6257144e6032e90417d006
 </style>

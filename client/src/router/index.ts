@@ -15,6 +15,7 @@ import ReportsView from '../views/merchant/ReportsView.vue';
 import GatewaysView from '../views/merchant/GatewaysView.vue';
 import SettingsView from '../views/merchant/SettingsView.vue';
 import AdminDashboard from '../pages/dashboard/AdminDashboard.vue';
+import ModeratorDashboard from '../pages/dashboard/ModeratorDashboard.vue';
 import SuperAdminDashboard from '../views/super-admin/DashboardView.vue';
 import UserManagementView from '../views/super-admin/UserManagementView.vue';
 import UserDetailView from '../views/super-admin/UserDetailView.vue';
@@ -31,6 +32,8 @@ import SettingsPage from '../pages/settings/SettingsPage.vue';
 import TaxSettingsPage from '../pages/settings/TaxSettingsPage.vue';
 import ReportsPage from '../pages/reports/ReportsPage.vue';
 import { authGuard } from './guards';
+import ProfilePage from '../pages/users/ProfilePage.vue';
+import AuditLogsView from '../views/super-admin/AuditLogsView.vue';
 
 const routes: Array<RouteRecordRaw> = [
   { path: '/', component: LoginPage },
@@ -44,7 +47,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: '', component: MerchantDashboard },
       { path: 'payment-links', component: PaymentLinksView },
       { path: 'products', component: ProductsView },
-      // { path: 'profile', component: ProfilePage },
+      { path: 'profile', component: ProfilePage },
       { path: 'transactions', component: TransactionsView },
       { path: 'transactions/:id', component: TransactionDetailView },
       { path: 'invoices', component: InvoicesPage },
@@ -62,7 +65,11 @@ const routes: Array<RouteRecordRaw> = [
     component: ModeratorLayout,
     meta: { requiresAuth: true, roles: ['moderator'] },
     children: [
-      { path: '', component: AdminDashboard },
+      { path: '', component: ModeratorDashboard },
+      { path: 'users', component: UsersPage }, //Done
+      { path: 'analytics', component: GatewayAnalyticsView }, //Done
+
+
     ],
   },
   {
@@ -76,7 +83,7 @@ const routes: Array<RouteRecordRaw> = [
       { path: 'kyc', component: KYCVerificationView }, //Done
       { path: 'gateways', component: GatewayManagementView }, //Done
       { path: 'analytics', component: GatewayAnalyticsView }, //Done
-      // { path: 'logs', component: AuditLogsView },   // Audit Log route
+      { path: 'logs', component: AuditLogsView },   // Audit Log route
       { path: 'settings', component:SettingsPage}
     ],
   },

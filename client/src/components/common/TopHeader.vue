@@ -1,7 +1,6 @@
 <template>
   <header class="flex items-center justify-between p-4 bg-white border-b dark:bg-gray-800 dark:border-gray-700">
     <div class="flex items-center">
-      <img class="w-auto h-8" src="@/assets/logo.svg" alt="XtremePay">
       <div class="ml-6">
         <Breadcrumb />
       </div>
